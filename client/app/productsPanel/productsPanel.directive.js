@@ -6,6 +6,7 @@ function productsPanel() {
     templateUrl: 'app/productsPanel/productsPanel.html',
     restrict: 'E',
     link: function () {},
+    controllerAs: 'vm',
     controller: productsPanelCtrl
   };
 
@@ -14,28 +15,34 @@ function productsPanel() {
   function productsPanelCtrl($scope, $resource, cartService) {
     var vm = this;
 
-    var r = $resource('api/products/:q', {q: '@q'});
-    var r2 = $resource('api/products/:qp/:qf', {qp: '@qp', qf: '@qf'});
-    
-    vm.products = r.query();
-   
-    vm.search = function(){
+    /**
+     * Public methods
+     */
+    vm.searchTerm = '';
+    vm.search = search;
+    vm.addToCart = addToCart;
+
+    init();
+    return vm;
+
+    /**
+     * Private methods
+     */
+    function init () {
+        var r = $resource('api/products/:q', {q: '@q'});
+        vm.products = r.query();
+    }
+
+    function search (){
+      var r = $resource('api/products/:q', {q: '@q'});
       if(vm.searchTerm && vm.searchTerm.length > 2){
         vm.products = r.query({q: vm.searchTerm});
       }
-    };
+    }
 
-    vm.getProductsFilter = function(query){
-      vm.productsFilter = r2.query({qp: vm.searchTerm, qf: query});   
-           
-    };
-    
-    vm.addToCart = function(id){
+    function addToCart(id){
       cartService.addToCart(id);
-    };
-
-
-
+    }
   }
 }
 
