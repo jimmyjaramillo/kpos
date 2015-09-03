@@ -15,17 +15,26 @@ function productsPanel() {
     var vm = this;
 
     var r = $resource('api/products/:q', {q: '@q'});
+    var r2 = $resource('api/products/:qp/:qf', {qp: '@qp', qf: '@qf'});
+    
     vm.products = r.query();
-
+   
     vm.search = function(){
       if(vm.searchTerm && vm.searchTerm.length > 2){
         vm.products = r.query({q: vm.searchTerm});
       }
     };
 
+    vm.getProductsFilter = function(query){
+      vm.productsFilter = r2.query({qp: vm.searchTerm, qf: query});   
+           
+    };
+    
     vm.addToCart = function(id){
       cartService.addToCart(id);
     };
+
+
 
   }
 }

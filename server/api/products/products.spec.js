@@ -21,7 +21,7 @@ describe('GET /api/products', function() {
       var collection = db.collection('products');
       // Insert some documents
       products = _.map([1, 2, 3, 4, 5], function(i){
-        return {_id: i, name: 'product ' + i, price: i * 100};
+        return {_id: i, name: 'product ' + i, price: i * 100, featured: true, onSale: false};
       });
 
       collection.insert(products);
@@ -75,4 +75,26 @@ describe('GET /api/products', function() {
         done();
       });
     });
+
+
+  /*
+   * we should get the product filtered by name or type (featured and onSale)
+   * when we call /api/products/produ/(onSale or featured)<q>
+   * been <q> the query
+   * */
+
+  it('should get the products filtered by name or type', function(done) {
+    request(app)
+      .get('/api/products/product /featured')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.be.instanceof(Array);
+        res.body.length.should.equal(5);
+        done();
+      });
+    });
+
+
 });

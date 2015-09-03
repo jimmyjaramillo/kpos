@@ -34,3 +34,18 @@ exports.findbyQuery = function(req, res) {
     });
   });
 };
+
+//Get products by name and featured
+exports.findbyNameandType = function(req, res) {
+  MongoClient.connect(url, function(err, db) {
+    var products = db.collection('products');
+    var str = req.params.query || '';
+    var typeproduct= req.params.type;
+    console.log('DEBUG:', str, typeproduct);
+    products.find({$or: [ { "name": {$regex: str} }, { typeproduct: true  } ] }).toArray(function(err, docs){
+      console.log(docs);
+      res.json(docs);
+      db.close();
+    });
+  });
+};
