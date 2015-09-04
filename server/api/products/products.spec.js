@@ -85,7 +85,7 @@ describe('GET /api/products', function() {
 
   it('should get the products filtered by name or type', function(done) {
     request(app)
-      .get('/api/products//onSale')
+      .get('/api/products/ /onSale')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {

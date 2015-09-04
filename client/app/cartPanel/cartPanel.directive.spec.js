@@ -6,10 +6,11 @@ describe('Directive: cartPanel', function () {
   beforeEach(module('kposApp'));
   beforeEach(module('app/cartPanel/cartPanel.html'));
 
-  var element, scope;
+  var element, scope, cartService,ctrl;
 
-  beforeEach(inject(function ($rootScope) {
+  beforeEach(inject(function ($rootScope, _cartService_) {
     scope = $rootScope.$new();
+    cartService= _cartService_;
   }));
 
   it('should make hidden element visible', inject(function ($compile) {
@@ -24,6 +25,15 @@ describe('Directive: cartPanel', function () {
    * - call cartService getCart on init
    * - Should have a customer, even 'consumidor final'
    **/
+
+  it('should render a cart', inject(function ($compile) {
+    element = angular.element('<cart-panel></cart-panel>');
+    spyOn(cartService, 'getCart');
+    element = $compile(element)(scope);
+    scope.$digest();
+    ctrl = element.controller('cartPanel');
+    expect(cartService.getCart).toHaveBeenCalled();
+  }));
 
   /*
    * TODO: Should allow to change the client from the dropdown
