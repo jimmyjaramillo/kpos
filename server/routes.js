@@ -12,7 +12,7 @@ var clients = require('./api/clients/clients.controller');
   // Insert routes below
   app.get('/api/clients', clients.findAll);
   app.get('/api/clients/:query?', clients.findbyQuery);
-  app.get('/api/products', products.findAll);
+  app.get('/api/products', products.findAllOrById);
   app.get('/api/products/:query?', products.findbyQuery);
   app.get('/api/products/:query?/:typeproduct?', products.findbyNameandType);
   app.use('/api/things', require('./api/thing'));
