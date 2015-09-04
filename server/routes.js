@@ -14,7 +14,7 @@ var clients = require('./api/clients/clients.controller');
   app.get('/api/clients/:query?', clients.findbyQuery);
   app.get('/api/products', products.findAll);
   app.get('/api/products/:query?', products.findbyQuery);
-  app.get('/api/products/:query?/:type?', products.findbyNameandType);
+  app.get('/api/products/:query?/:typeproduct?', products.findbyNameandType);
   app.use('/api/things', require('./api/thing'));
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

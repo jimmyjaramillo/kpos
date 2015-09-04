@@ -40,12 +40,26 @@ exports.findbyNameandType = function(req, res) {
   MongoClient.connect(url, function(err, db) {
     var products = db.collection('products');
     var str = req.params.query || '';
-    var typeproduct= req.params.type;
-    console.log('DEBUG:', str, typeproduct);
-    products.find({$or: [ { "name": {$regex: str} }, { typeproduct: true  } ] }).toArray(function(err, docs){
-      console.log(docs);
-      res.json(docs);
-      db.close();
-    });
+    var typeproduct= req.params.typeproduct;
+    console.log('DEBUG:', str.trim().length, typeproduct);
+    var query;
+    if(str.trim().length===0){
+      if(typeproduct==="featured"){
+        query= {"featured": true };
+      }else{
+        query= {"onSale": true };
+      }
+    }else{
+      if(typeproduct==="featured"){
+        query= {$and: [ { "name": {$regex: str} }, { "featured": true  } ] };
+      }else{
+        query= {$and: [ { "name": {$regex: str} }, { "onSale": true  } ] };
+      }
+    }
+    products.find(query).toArray(function(err, docs){
+        console.log(docs);
+        res.json(docs);
+        db.close();
+      });
   });
 };
