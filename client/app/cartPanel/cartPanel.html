@@ -1,1 +1,35 @@
-<div>this is the cartPanel directive</div>
+<div>
+this is the cartPanel directive
+<div class="table-responsive">          
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Qty.</th>
+        <th>Product</th>        
+        <th>Price</th>        
+        <th>Total</th>     
+      </tr>
+    </thead>
+    <tbody ng-repeat="i in cart.items">
+      <tr>
+        <td>{{i.qty}}</td>
+        <td>{{i.product}}</td>
+        <td>{{i.price}}</td>
+        <td>{{i.total}}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+    	<tr>
+    		<td align="right" colspan="3">Subtotal:</td><td>{{cart.subtotal}}</td>
+    	</tr>
+    	<tr>
+    		<td align="right" colspan="3">Tax:</td><td>{{cart.tax}}</td>
+    	</tr>
+    	<tr>
+    		<td align="right" colspan="3">Total:</td><td>{{cart.total}}</td>
+    	</tr>
+
+    </tfoot>
+  </table>
+  </div>
+</div>
