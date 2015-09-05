@@ -21,8 +21,12 @@ describe('GET /api/products', function() {
       var collection = db.collection('products');
       // Insert some documents
       products = _.map([1, 2, 3, 4, 5], function(i){
-        return {_id: i, name: 'product ' + i, price: i * 100, featured: true, onSale: false};
+
+        return {_id: i, name: 'product ' + i, price: i * 100, featured: false, onsale: false};
       });
+
+      // make one product featured
+      products[0].featured = true;
 
       collection.insert(products);
 
@@ -70,31 +74,41 @@ describe('GET /api/products', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.be.instanceof(Array);
-        res.body.length.should.equal(1);
+        //TODO: esto deberia ser solo un objeto
+        res.body.should.be.instanceof(Object);
+        res.body._id.should.equal(1);
         done();
       });
     });
 
-
-  /*
-   * we should get the product filtered by name or type (featured and onSale)
-   * when we call /api/products/produ/(onSale or featured)<q>
-   * been <q> the query
-   * */
-
-  it('should get the products filtered by name or type', function(done) {
+  it('should not get the product because the parameter is not an integer', function(done) {
     request(app)
-      .get('/api/products/ /onSale')
+      .get('/api/products?_id=product')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.be.instanceof(Array);
-        res.body.length.should.equal(0);
+        res.body.should.be.instanceof(Object);
+        res.body.should.eql({});
         done();
       });
+  });
+
+  /*
+   * we should get the product filtered
+   * when we call /api/products/<f>
+   * been <f> the filter
+   * */
+  it('should get the products filtered by featured', function(done) {
+    request(app)
+    .get('/api/products/featured')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(function(err, res) {
+      if (err) return done(err);
+      res.body.should.be.instanceof(Array);
+      res.body.length.should.equal(1);
+      done();
     });
-
-
+  });
 });
